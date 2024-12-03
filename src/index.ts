@@ -1,4 +1,4 @@
-import { readdir, readFile } from 'fs/promises';
+import { readdir, readFile, writeFile } from 'fs/promises';
 
 interface Module {
   default(input: string): [number | string, number | string];
@@ -24,6 +24,13 @@ readdir(__dirname)
     const start = +new Date();
     let totalTime = 0;
 
+    let output = '';
+
+    function log(input: string) {
+      output = [output, input].join('\n');
+      console.log(input);
+    }
+
     for (let i = 1; i < modAndInputs.length; i++) {
       if (days.length > 0 && !days.includes(i)) {
         console.log('Skip day:', i);
@@ -36,15 +43,27 @@ readdir(__dirname)
       const time = Number(process.hrtime.bigint() - startDay) / 1e6;
       totalTime += time;
 
-      console.info(`======== Day ${i} ========`);
-      console.log(`Part 1: ${p1}`);
-      console.log(`Part 2: ${p2}`);
-      console.log(`⏱ Day ${i} time: ${time.toPrecision(5)}ms`);
+      log(`======== Day ${i} ========`);
+      log(`Part 1: ${p1}`);
+      log(`Part 2: ${p2}`);
+      log(`⏱ Day ${i} time: ${time.toPrecision(5)}ms`);
     }
 
-    console.info('========================');
-    console.log(`Execution time: ${totalTime.toPrecision(5)}ms`);
-    console.log(`⏱ Total time with cleanup: ${+new Date() - start}ms`);
-    console.log(`⏱ Total time with loading and cleanup: ${+new Date() - totalStart}ms`);
+    log('========================');
+    log(`Execution time: ${totalTime.toPrecision(5)}ms`);
+    log(`⏱ Total time with cleanup: ${+new Date() - start}ms`);
+    log(`⏱ Total time with loading and cleanup: ${+new Date() - totalStart}ms`);
+
+    return output;
+  })
+  .then((output) => {
+    const path = `${__dirname}/../README.md`;
+    return readFile(path)
+      .then((o) => o.toString())
+      .then((readme) => readme.replace(/```(\n.+)+\n```/, ['```', output, '\n```'].join('')))
+      .then((newReadme) => writeFile(path, newReadme))
+      .then(() => {
+        console.log('Updated README.md');
+      });
   })
   .catch(console.error);
