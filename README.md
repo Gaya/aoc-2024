@@ -4,19 +4,19 @@
 ======== Day 1 ========
 Part 1: 1970720
 Part 2: 17191599
-⏱ Day 1 time: 7.3018ms
+⏱ Day 1 time: 5.8502ms
 ======== Day 2 ========
 Part 1: 402
 Part 2: 455
-⏱ Day 2 time: 3.2746ms
+⏱ Day 2 time: 3.6350ms
 ======== Day 3 ========
 Part 1: 175700056
-Part 2: 71668682
-⏱ Day 3 time: 0.75708ms
+Part 2: 128096826
+⏱ Day 3 time: 0.75562ms
 ========================
-Execution time: 11.333ms
-⏱ Total time with cleanup: 13ms
-⏱ Total time with loading and cleanup: 165ms
+Execution time: 10.241ms
+⏱ Total time with cleanup: 11ms
+⏱ Total time with loading and cleanup: 168ms
 ```
 
 ## Install
