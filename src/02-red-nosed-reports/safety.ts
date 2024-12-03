@@ -1,9 +1,14 @@
 export function isSafe(numbers: number[], dampener = false): boolean {
   return numbers.every((current, i) => {
-    const prevPrev = numbers[i - 2];
+    if (i === 0) {
+      return true;
+    }
+
     const prev = numbers[i - 1];
     const distance = current - prev;
-    const direction = typeof prevPrev !== 'undefined' ? prev - prevPrev : 0;
+    const prevPrev = numbers[i - 2];
+    const direction = prevPrev !== undefined
+      ? prev - prevPrev : 0;
 
     if (
       distance === 0
@@ -14,8 +19,9 @@ export function isSafe(numbers: number[], dampener = false): boolean {
       if (dampener) {
         // try again with all combinations without a number
         return numbers
-          .map((_, j) => numbers.filter((_, index) => index !== j))
-          .find((report) => isSafe(report));
+          .map((_, j) => numbers
+            .filter((_, index) => index !== j))
+          .some((report) => isSafe(report));
       }
 
       return false;
@@ -26,9 +32,9 @@ export function isSafe(numbers: number[], dampener = false): boolean {
 }
 
 export function safeReports(input: string, dampener = false): number {
-  const lines = input
+  const reports = input
     .split('\n')
     .map((line) => line.split(' ').map((i) => parseInt(i, 10)));
 
-  return lines.filter((report) => isSafe(report, dampener)).length;
+  return reports.filter((report) => isSafe(report, dampener)).length;
 }
