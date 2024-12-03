@@ -1,19 +1,17 @@
 export function extractMultiplications(input: string, withFilter = false): [number, number][] {
-  const matches = input.matchAll(/mul\((\d{1,3}),(\d{1,3})\)|do(n't)?\(\)/gm);
+  let inputString = input;
+
+  if (withFilter) {
+    inputString = inputString.replace(/don't\(\).+do\(\)/gm, '');
+  }
+
+  const matches = inputString.matchAll(/mul\((\d{1,3}),(\d{1,3})\)/gm);
 
   const numbers: [number, number][] = [];
-  let enabled = true;
 
   for (let result of matches) {
-    const [instruction, a, b] = result;
-
-    if (instruction === 'do()') {
-      enabled = true;
-    } else if (instruction === 'don\'t()') {
-      enabled = false;
-    } else if (enabled || !withFilter) {
-      numbers.push([parseInt(a, 10), parseInt(b, 10)]);
-    }
+    const [_, a, b] = result;
+    numbers.push([parseInt(a, 10), parseInt(b, 10)]);
   }
 
   return numbers;
