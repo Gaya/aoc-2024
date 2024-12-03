@@ -19,10 +19,8 @@ export function similarityScore(input: string): number {
   const [a, b] = splitInput(input);
 
   const scores = b.reduce((acc: Record<number, number>, number): Record<number, number> => {
-    return {
-      ...acc,
-      [number]: acc[number] ? acc[number] + 1 : 1,
-    }
+    acc[number] = acc[number] ? acc[number] + 1 : 1;
+    return acc;
   }, {})
 
   return a.reduce((acc, item) => {
