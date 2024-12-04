@@ -74,10 +74,10 @@ export function xSearch(input: string): number {
         const se = letterInGrid(grid, y + 1, x + 1);
         const sw = letterInGrid(grid, y + 1, x - 1);
 
-        const we = (nw === 'M' && se === 'S') || (nw === 'S' && se === 'M');
-        const ew = (ne === 'M' && sw === 'S') || (ne === 'S' && sw === 'M');
+        const nwse = (nw === 'M' && se === 'S') || (nw === 'S' && se === 'M');
+        const nesw = (ne === 'M' && sw === 'S') || (ne === 'S' && sw === 'M');
 
-        if (we && ew) {
+        if (nwse && nesw) {
           total++;
         }
       }
