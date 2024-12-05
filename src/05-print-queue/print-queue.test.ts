@@ -1,4 +1,11 @@
-import { findAndAddMiddle, findCorrect, parseInput } from './print-queue';
+import {
+  findAndAddMiddle,
+  findCorrect,
+  findInCorrect,
+  fixInput,
+  fixUpdate,
+  parseInput,
+} from './print-queue';
 
 const input = `47|53
 97|13
@@ -69,5 +76,37 @@ describe('findAndAddMiddle', () => {
       '97,61,53,29,13',
       '75,29,13',
     ])).toBe(143);
+  });
+});
+
+describe('findInCorrect', () => {
+  it('should return the correct print queues', () => {
+    expect(findInCorrect(parseInput(input))).toEqual([
+      '75,97,47,61,53',
+      '61,13,29',
+      '97,13,75,29,47',
+    ]);
+  })
+})
+
+describe('fixUpdate', () => {
+  it('should correctly fix the order', () => {
+    const q = parseInput(input);
+
+    expect(fixUpdate(q, '75,97,47,61,53')).toBe('97,75,47,61,53')
+    expect(fixUpdate(q, '61,13,29')).toBe('61,29,13')
+    expect(fixUpdate(q, '97,13,75,29,47')).toBe('97,75,47,29,13')
+  });
+});
+
+describe('fixInput', () => {
+  it('should correctly fix the order', () => {
+    const q = parseInput(input);
+
+    expect(fixInput(q)).toEqual([
+      '97,75,47,61,53',
+      '61,29,13',
+      '97,75,47,29,13',
+    ])
   });
 });
