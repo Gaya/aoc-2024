@@ -40,30 +40,34 @@ describe('parseInput', () => {
         '53': ['29', '13'],
         '61': ['13', '53', '29'],
       },
-      updates: `75,47,61,53,29
-97,61,53,29,13
-75,29,13
-75,97,47,61,53
-61,13,29
-97,13,75,29,47`,
+      updates: [
+        '75,47,61,53,29',
+        '97,61,53,29,13',
+        '75,29,13',
+        '75,97,47,61,53',
+        '61,13,29',
+        '97,13,75,29,47',
+      ],
     })
   })
 })
 
 describe('findCorrect', () => {
   it('should return the correct print queues', () => {
-    expect(findCorrect(parseInput(input))).toEqual(`75,47,61,53,29
-97,61,53,29,13
-75,29,13`)
+    expect(findCorrect(parseInput(input))).toEqual([
+      '75,47,61,53,29',
+      '97,61,53,29,13',
+      '75,29,13',
+    ]);
   })
 })
 
 describe('findAndAddMiddle', () => {
   it('should return the middle numbers added', () => {
-    expect(findAndAddMiddle(
-      `75,47,61,53,29
-97,61,53,29,13
-75,29,13`
-    )).toBe(143);
+    expect(findAndAddMiddle([
+      '75,47,61,53,29',
+      '97,61,53,29,13',
+      '75,29,13',
+    ])).toBe(143);
   });
 });

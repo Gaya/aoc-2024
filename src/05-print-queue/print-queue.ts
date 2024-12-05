@@ -1,10 +1,10 @@
 interface Queue {
   rules: Record<string, string[]>;
-  updates: string;
+  updates: string[];
 }
 
 export function parseInput(input: string): Queue {
-  const rules = Array.from(input.matchAll(/(\d+)\|(\d+)/gm)) || [];
+  const rules = Array.from(input.matchAll(/(\d{2})\|(\d{2})/gm)) || [];
 
   return {
     rules: rules.reduce((acc: Record<string, string[]>, [_, a, b]) => {
@@ -13,21 +13,24 @@ export function parseInput(input: string): Queue {
         [a]: acc[a] ? [...acc[a], b] : [b],
       };
     }, {}),
-    updates: (input.match(/^(?:(\d+),?)+$/gm) || []).join('\n'),
+    updates: (input.match(/^(?:(\d{2}),?)+$/gm) || []),
   };
 }
 
-export function findCorrect(queue: Queue): string {
-  const rules = Object.entries(queue.rules).map(([key, values]) => {
-    return `(?:^|.+)(?:(?<=,|^)${values.join('|')})(.+)(?=(?<=,)${key}).+$`;
-  });
+export function findCorrect(queue: Queue): string[] {
+  return queue.updates.filter((update) => {
+    return Object.entries(queue.rules).every(([key, values]) => {
+      if (update.includes(key)) {
+        return !update.match(`(?:${values.join('|')})(.+)(?=${key}).+$`);
+      }
 
-  return queue.updates.replace(new RegExp(rules.join('|'), 'gm'), '')
-    .split('\n').filter((r) => r !== '').join('\n');
+      return true;
+    });
+  });
 }
 
-export function findAndAddMiddle(input: string): number {
-  return input.split('\n').reduce((acc, row) => {
+export function findAndAddMiddle(input: string[]): number {
+  return input.reduce((acc, row) => {
     const numbers = row.split(',');
     return acc + parseInt(numbers[Math.floor(numbers.length / 2)], 10);
   }, 0);
