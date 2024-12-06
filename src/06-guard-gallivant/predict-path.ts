@@ -43,7 +43,22 @@ export function parseInput(input: string): GuardState {
   };
 }
 
-export function countSteps(state: GuardState, currentSteps: Record<string, boolean> = {}): number {
+type GuardSteps = Record<string, Record<'N' | 'E' | 'S' | 'W', boolean>>;
+
+function addToStep(currentSteps: GuardSteps, position: string, direction: 'N' | 'E' | 'S' | 'W'): GuardSteps {
+  if (!currentSteps[position]) {
+    currentSteps[position] = {
+      'N': direction === 'N',
+      'E': direction === 'E',
+      'S': direction === 'S',
+      'W': direction === 'W',
+    }
+  }
+
+  return currentSteps;
+}
+
+function guardPaths(state: GuardState, currentSteps: GuardSteps = {}): [GuardSteps, boolean] {
   const [x, y] = state.guard;
 
   const obstaclesInDirection = state.direction === 'N' || state.direction === 'S'
@@ -65,46 +80,58 @@ export function countSteps(state: GuardState, currentSteps: Record<string, boole
       const firstCollision = obstaclesInView[0];
       const distance = Math.abs(firstCollision - positionToCheck) - 1;
 
+      for (let i = 0; i < distance; i++) {
+        let pos = '';
+        switch (state.direction) {
+          case 'N': {
+            pos = `${x}:${y-i}`;
+          }
+            break;
+          case 'E': {
+            pos = `${x+i}:${y}`;
+          }
+            break;
+          case 'S': {
+            pos = `${x}:${y+i}`;
+          }
+            break;
+          case 'W': {
+            pos = `${x-i}:${y}`;
+          }
+            break;
+        }
+
+        if (currentSteps[pos] && currentSteps[pos][state.direction]) {
+          return [currentSteps, true];
+        }
+
+        addToStep(currentSteps, pos, state.direction);
+      }
+
       switch (state.direction) {
         case 'N': {
           state.guard = [x, y - distance];
           state.direction = 'E';
-
-          for (let i = 0; i < distance; i++) {
-            currentSteps[`${x}:${y-i}`] = true;
-          }
         }
-        break;
+          break;
         case 'E': {
           state.guard = [x + distance, y];
           state.direction = 'S';
-
-          for (let i = 0; i < distance; i++) {
-            currentSteps[`${x+i}:${y}`] = true;
-          }
         }
-        break;
+          break;
         case 'S': {
           state.guard = [x, y + distance];
           state.direction = 'W';
-
-          for (let i = 0; i < distance; i++) {
-            currentSteps[`${x}:${y+i}`] = true;
-          }
         }
-        break;
+          break;
         case 'W': {
           state.guard = [x - distance, y];
           state.direction = 'N';
-
-          for (let i = 0; i < distance; i++) {
-            currentSteps[`${x-i}:${y}`] = true;
-          }
         }
-        break;
+          break;
       }
 
-      return countSteps(
+      return guardPaths(
         state,
         currentSteps,
       );
@@ -114,31 +141,68 @@ export function countSteps(state: GuardState, currentSteps: Record<string, boole
   switch (state.direction) {
     case 'N': {
       for (let i = 0; i < y; i++) {
-        currentSteps[`${x}:${y - i}`] = true;
+        addToStep(currentSteps, `${x}:${y-i}`, 'N');
       }
     }
     break;
     case 'E': {
       const distanceToEnd = state.gridSize[0] - x;
       for (let i = 0; i < distanceToEnd; i++) {
-        currentSteps[`${x + i}:${y}`] = true;
+        addToStep(currentSteps, `${x + i}:${y}`, 'E');
       }
     }
     break;
     case 'S': {
       const distanceToEnd = state.gridSize[1] - y;
       for (let i = 0; i < distanceToEnd; i++) {
-        currentSteps[`${x}:${y + i}`] = true;
+        addToStep(currentSteps, `${x}:${y + i}`, 'S');
       }
     }
     break;
     case 'W': {
       for (let i = 0; i < x; i++) {
-        currentSteps[`${x - i}:${y}`] = true;
+        addToStep(currentSteps, `${x - i}:${y}`, 'W');
       }
     }
     break;
   }
 
-  return Object.keys(currentSteps).length;
+  return [currentSteps, false];
+}
+
+export function countSteps(input: string) {
+  const steps = guardPaths(parseInput(input));
+  return Object.keys(steps[0]).length
+}
+
+export function findLoops(input: string): number {
+  const state = parseInput(input);
+  const [normalPath] = guardPaths({ ...state });
+  const guard = state.guard.join(':');
+
+  return Object.keys(normalPath).filter((pos) => {
+    if (pos === guard) {
+      return false;
+    }
+
+    const [xs, ys] = pos.split(':');
+    const x = parseInt(xs, 10);
+    const y = parseInt(ys, 10);
+
+    const [_, loop] = guardPaths({
+      ...state,
+      obstacles: {
+        x: {
+          ...state.obstacles.x,
+          [x]: [...(state.obstacles.x[x] || []), y],
+        },
+        y: {
+          ...state.obstacles.y,
+          [y]: [...(state.obstacles.y[y] || []), x],
+        },
+      }
+    });
+
+    return loop;
+  }).length;
 }

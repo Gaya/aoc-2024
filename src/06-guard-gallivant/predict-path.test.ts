@@ -1,4 +1,4 @@
-import { countSteps, parseInput } from './predict-path';
+import { countSteps, findLoops, parseInput } from './predict-path';
 
 const input = `....#.....
 .........#
@@ -46,6 +46,12 @@ describe('parseInput', () => {
 
 describe('countSteps', () => {
   it('should predict the amount of steps of the guard', () => {
-      expect(countSteps(parseInput(input))).toBe(41);
+    expect(countSteps(input)).toBe(41);
   });
+});
+
+describe('findLoops', () => {
+  it('should find 6 loops for the original input', () => {
+    expect(findLoops(input)).toBe(6);
+  })
 });
