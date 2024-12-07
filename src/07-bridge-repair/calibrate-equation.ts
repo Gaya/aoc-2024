@@ -13,21 +13,14 @@ export function findCorrectEquations(equations: number[][]): number[] {
         return [num];
       }
 
-      const lastNumbers = acc
-        .slice(Math.pow(2, index - 1) * -1)
-        .reduce((last: number[], lastNum) => [
-          ...last,
+      return acc.reduce((newAcc: number[], lastNum) => [
+          ...newAcc,
           lastNum + num,
           lastNum * num,
         ], []);
-
-      return [
-        ...acc,
-        ...lastNumbers,
-      ]
     }, []);
 
-    return outcomes.indexOf(outcome) > -1;
+    return outcomes.find((n) => n === outcome);
   }).map(([outcome]) => outcome);
 }
 

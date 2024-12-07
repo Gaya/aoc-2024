@@ -28,13 +28,12 @@ describe('parseInput', () => {
 
 describe('findCorrectEquations', () => {
   it('should find the possible equations', () => {
-    expect(findCorrectEquations([[292, 11, 6, 16, 20]])).toEqual([292]);
-    // expect(findCorrectEquations(parseInput(input))).toStrictEqual([190, 3267, 292]);
+    expect(findCorrectEquations(parseInput(input))).toStrictEqual([190, 3267, 292]);
   });
 });
 
 describe('calibrationResult', () => {
   it('should add up all possible equations', () => {
-    // expect(calibrationResult(input)).toBe(3749);
+    expect(calibrationResult(input)).toBe(3749);
   });
 });
