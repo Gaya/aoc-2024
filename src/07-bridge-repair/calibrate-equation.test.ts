@@ -30,10 +30,25 @@ describe('findCorrectEquations', () => {
   it('should find the possible equations', () => {
     expect(findCorrectEquations(parseInput(input))).toStrictEqual([190, 3267, 292]);
   });
+
+  it('should find the possible equations with concat', () => {
+    expect(findCorrectEquations(parseInput(input), true)).toStrictEqual([
+      190,
+      3267,
+      156,
+      7290,
+      192,
+      292,
+    ]);
+  });
 });
 
 describe('calibrationResult', () => {
   it('should add up all possible equations', () => {
     expect(calibrationResult(input)).toBe(3749);
+  });
+
+  it('should add up all possible equations with concat', () => {
+    expect(calibrationResult(input, true)).toBe(11387);
   });
 });
