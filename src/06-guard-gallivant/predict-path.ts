@@ -58,7 +58,7 @@ function addToStep(currentSteps: GuardSteps, position: string, direction: 'N' | 
   return currentSteps;
 }
 
-function guardPaths(state: GuardState, currentSteps: GuardSteps = {}): [GuardSteps, boolean] {
+function guardPaths(state: GuardState, currentSteps: GuardSteps = {}, countAll = true): [GuardSteps, boolean] {
   const [x, y] = state.guard;
 
   const obstaclesInDirection = state.direction === 'N' || state.direction === 'S'
@@ -80,7 +80,7 @@ function guardPaths(state: GuardState, currentSteps: GuardSteps = {}): [GuardSte
       const firstCollision = obstaclesInView[0];
       const distance = Math.abs(firstCollision - positionToCheck) - 1;
 
-      for (let i = 0; i < distance; i++) {
+      for (let i = countAll ? 0 : distance - 1; i < distance; i++) {
         let pos = '';
         switch (state.direction) {
           case 'N': {
@@ -134,6 +134,7 @@ function guardPaths(state: GuardState, currentSteps: GuardSteps = {}): [GuardSte
       return guardPaths(
         state,
         currentSteps,
+        countAll,
       );
     }
   }
@@ -200,8 +201,8 @@ export function findLoops(input: string): number {
           ...state.obstacles.y,
           [y]: [...(state.obstacles.y[y] || []), x],
         },
-      }
-    });
+      },
+    }, {}, false);
 
     return loop;
   }).length;
