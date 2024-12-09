@@ -30,11 +30,15 @@ export function parseInput(input: string): AntennaGrid {
   };
 }
 
-export function getAntinodes(grid: AntennaGrid): number {
+export function getAntinodes(grid: AntennaGrid, doubled = false): number {
   const Locations = new Set();
 
   Object.values(grid.antennas).forEach((antennas) => {
     antennas.forEach((antenna, index) => {
+      if (doubled) {
+        Locations.add(antenna.join(':'));
+      }
+
       if (index === antennas.length - 1) {
         return;
       }
@@ -45,16 +49,30 @@ export function getAntinodes(grid: AntennaGrid): number {
         const [ox, oy] = otherAntenna;
         const xDist = x - ox;
         const yDist = y - oy;
-        const positions = [
-          [x + xDist, y + yDist],
-          [ox - xDist, oy - yDist],
-        ];
 
-        positions.forEach((pos) => {
-          if (pos[0] >= 0 && pos[0] < grid.cols && pos[1] >= 0 && pos[1] < grid.rows) {
-            Locations.add(pos.join(':'));
+        let canAdd = true;
+        let j = 1;
+        while (canAdd) {
+          let success = 0;
+          const nx = x + (xDist * j);
+          const ny = y + (yDist * j);
+
+          if (nx >= 0 && nx < grid.cols && ny >= 0 && ny < grid.rows) {
+            Locations.add([nx, ny].join(':'));
+            success++;
           }
-        });
+
+          const onx = ox - (xDist * j);
+          const ony = oy - (yDist * j);
+
+          if (onx >= 0 && onx < grid.cols && ony >= 0 && ony < grid.rows) {
+            Locations.add([onx, ony].join(':'));
+            success++;
+          }
+
+          j++;
+          canAdd = doubled && success > 0;
+        }
       });
     });
   });

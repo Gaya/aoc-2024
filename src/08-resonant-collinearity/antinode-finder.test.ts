@@ -30,4 +30,8 @@ describe('getAntinodes', () => {
   it('should return the correct number of antinode positions', () => {
     expect(getAntinodes(parseInput(input))).toEqual(14);
   });
+
+  it('should return the correct number of antinode double positions', () => {
+    expect(getAntinodes(parseInput(input), true)).toEqual(34);
+  });
 })
