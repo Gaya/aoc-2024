@@ -16,18 +16,23 @@ export function fragmentInput(input: number[]): number[] {
     return acc;
   }, []);
 
-  return input.reduce((acc: number[], num, index) => {
-    const empty = index % 2 === 1;
+  const output: number[] = [];
 
-    const items = empty ? numbers.slice(num * -1).reverse() : numbers.slice(0, num);
-    numbers = empty ? numbers.slice(0, num * -1) : numbers.slice(num);
+  for (let i = 0; i < input.length; i++) {
+    const num = input[i];
+    const empty = i % 2 === 1;
 
-    if (items.length === 0) {
-      return acc;
+    for (let j = 0; j < num; j++) {
+      if (numbers.length === 0) {
+        return output;
+      }
+
+      output.push((empty ? numbers.pop() : numbers.shift()) || 0);
     }
 
-    return [...acc, ...items];
-  }, []);
+  }
+
+  return output;
 }
 
 export function checksum(input: string): number {

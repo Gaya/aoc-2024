@@ -4,43 +4,43 @@
 ======== Day 1 ========
 Part 1: 1970720
 Part 2: 17191599
-⏱ Day 1 time: 5.6205ms
+⏱ Day 1 time: 5.2183ms
 ======== Day 2 ========
 Part 1: 402
 Part 2: 455
-⏱ Day 2 time: 3.1708ms
+⏱ Day 2 time: 3.1559ms
 ======== Day 3 ========
 Part 1: 175700056
 Part 2: 71668682
-⏱ Day 3 time: 0.73733ms
+⏱ Day 3 time: 0.78008ms
 ======== Day 4 ========
 Part 1: 2654
 Part 2: 1990
-⏱ Day 4 time: 5.7127ms
+⏱ Day 4 time: 5.7093ms
 ======== Day 5 ========
 Part 1: 5268
 Part 2: 5799
-⏱ Day 5 time: 86.508ms
+⏱ Day 5 time: 87.114ms
 ======== Day 6 ========
 Part 1: 4964
 Part 2: 1740
-⏱ Day 6 time: 318.49ms
+⏱ Day 6 time: 316.73ms
 ======== Day 7 ========
 Part 1: 1289579105366
 Part 2: 92148721834692
-⏱ Day 7 time: 199.88ms
+⏱ Day 7 time: 201.40ms
 ======== Day 8 ========
 Part 1: 318
 Part 2: 1126
-⏱ Day 8 time: 2.8943ms
+⏱ Day 8 time: 2.9431ms
 ======== Day 9 ========
-Part 1: 4184553013518
+Part 1: 6341711060162
 Part 2: 0
-⏱ Day 9 time: 6.0131ms
+⏱ Day 9 time: 101.68ms
 ========================
-Execution time: 629.03ms
-⏱ Total time with cleanup: 631ms
-⏱ Total time with loading and cleanup: 1057ms
+Execution time: 724.73ms
+⏱ Total time with cleanup: 726ms
+⏱ Total time with loading and cleanup: 1129ms
 ```
 
 ## Install
