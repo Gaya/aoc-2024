@@ -35,6 +35,44 @@ export function fragmentInput(input: number[]): number[] {
   return output;
 }
 
-export function checksum(input: string): number {
-  return fragmentInput(parseInput(input)).reduce((acc, id, index) => acc + (id * index), 0);
+export function betterFragmentInput(input: number[]): (number | undefined)[] {
+  const output: (number | undefined)[] = [];
+  const couples = input.length / 2;
+  const indexes: Record<number, boolean> = {};
+
+  for (let i = 0; i < couples; i++) {
+    const index = (i * 2);
+    const num = input[index];
+    let empty = input[index + 1];
+    const id = index / 2;
+
+    for (let j = 0; j < num; j++) {
+      output.push(!indexes[index] ? id : undefined);
+    }
+
+    while (empty > 0) {
+      const fits = input.findLastIndex(((n, ind) => !indexes[ind] && ind % 2 === 0 && n <= empty));
+      const amount = fits > -1 ? input[fits] : empty;
+      const fitsId = fits > -1 ? fits / 2 : undefined;
+
+      if (fits > -1) {
+        indexes[fits] = true;
+      }
+
+      for (let j = 0; j < amount; j++) {
+        output.push(fitsId);
+      }
+
+      empty = empty - amount;
+    }
+  }
+
+  return output;
+}
+
+export function checksum(input: string, better = false): number {
+  const parsed = parseInput(input);
+  const fragmented = !better ? fragmentInput(parsed) : betterFragmentInput(parsed);
+
+  return fragmented.reduce((acc: number, id, index) => id !== undefined ? acc + (id * index) : acc, 0);
 }
